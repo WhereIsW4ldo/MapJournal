@@ -6,15 +6,19 @@ import * as ImagePicker from 'expo-image-picker';
 import styles from "./MapJournal.styles";
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
-import MapView from "react-native-maps";
+import MapView, {LatLng} from "react-native-maps";
+import {addImageLocation} from "@/app/stores/imageLocationStore";
+import {useAppDispatch, useAppSelector} from "@/app/hooks/hooks";
 
 const MapJournal = () => {
     const [selectedImages, setSelectedImages] = useState<string[]>();
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
-    
+
     const mapRef = useRef<MapView>(null);
-    
-    const { location, errorMsg } = useUserLocation();
+
+    const {location, errorMsg} = useUserLocation();
+    const dispatch = useAppDispatch();
+    const imageLocations = useAppSelector(state => state.imageLocation);
 
     function moveMapToUser(latitude: number, longitude: number) {
         if (!mapRef.current) return;
@@ -46,18 +50,29 @@ const MapJournal = () => {
             aspect: [4, 3],
             exif: true
         });
-        
+
         console.log(result);
         
         if (!result.canceled) {
             setSelectedImages(result.assets.map(a => a.uri));
-            console.log(result.assets[0].exif);
+            result.assets.map(a =>
+                dispatch(addImageLocation({
+                    id: a.uri,
+                    creationDate: "test",
+                    imageUrl: a.uri,
+                    coordinates: {latitude: 2, longitude: 3},
+                }))
+            );
         }
     }
 
+    useEffect(() => {
+        console.log('imageLocations: ', imageLocations);
+    }, [imageLocations]);
+
     return (
         <>
-            <Map 
+            <Map
                 location={location?.coords}
                 ref={mapRef}
             />
@@ -65,8 +80,8 @@ const MapJournal = () => {
                 style={styles.container}
             >
                 <View style={styles.buttonContainer}>
-                    <GenericButton label="+" onPressAsync={getImages} />
-                    <GenericButton label="." onPressAsync={handleMoveMapToUserClick} />
+                    <GenericButton label="+" onPressAsync={getImages}/>
+                    <GenericButton label="." onPressAsync={handleMoveMapToUserClick}/>
                 </View>
             </View>
         </>
