@@ -1,15 +1,16 @@
-import { Text, View } from "react-native";
+import {View} from "react-native";
+import MapJournal from "@/app/screens/MapJournal/MapJournal";
 
-export default function Index() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+function Index() {
+    return (
+        <View
+            style={{
+                flex: 1,
+            }}
+        >
+            <MapJournal />
+        </View>
+    );
 }
+
+export default Index;

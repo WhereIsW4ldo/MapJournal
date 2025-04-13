@@ -32,10 +32,29 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow MapJournal to use your location."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to be able to show them on the map."
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    }
+  },
+  "android": {
+    "config": {
+      "googleMaps": {
+        "apiKey": "process.env.GOOGLE_MAPS_API_KEY"
+      }
     }
   }
 }
