@@ -3,21 +3,21 @@ import * as ImagePicker from 'expo-image-picker';
 
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
-import MapView, {LatLng} from "react-native-maps";
-import {addImageLocation} from "@/app/stores/imageLocationStore";
+import MapView from "react-native-maps";
 import {useAppDispatch, useAppSelector} from "@/app/hooks/hooks";
 import ActionSheet from "@/app/components/ActionSheet/ActionSheet";
 import {useWindowDimensions, View} from "react-native";
 import styles from "@/app/components/ActionSheet/ActionSheet.styles";
 import GenericButton from "@/app/components/Buttons/GenericButton";
+import Gallery, {Section} from "@/app/components/Gallery/Gallery";
 
 const MapJournal = () => {
-    const { height } = useWindowDimensions();
+    const {height} = useWindowDimensions();
     const acceptablePanPositions = [0, -(height * 0.5), -(height * 0.95)];
-    
+
     const [selectedImages, setSelectedImages] = useState<string[]>();
+    const [imageAlbums, setImageAlbums] = useState<Section[]>([]);
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
-    const [sheetPosition, setSheetPosition] = useState(0);
 
     const mapRef = useRef<MapView>(null);
 
@@ -40,6 +40,10 @@ const MapJournal = () => {
         if (!mapRef.current || !location) return;
         moveMapToUser(location.coords.latitude, location.coords.longitude);
     }
+    
+    function addImageAlbum(title: string, images: string[]) {
+        setImageAlbums(imageAlbums => [...imageAlbums, {title, data: images}]);
+    }
 
     useEffect(() => {
         if (zoomedToUserLocation || !location || !mapRef.current) return;
@@ -55,25 +59,24 @@ const MapJournal = () => {
             aspect: [4, 3],
             exif: true
         });
-
         console.log(result);
         
-        if (!result.canceled) {
-            setSelectedImages(result.assets.map(a => a.uri));
-            result.assets.map(a =>
-                dispatch(addImageLocation({
-                    id: a.uri,
-                    creationDate: "test",
-                    imageUrl: a.uri,
-                    coordinates: {latitude: 2, longitude: 3},
-                }))
-            );
-        }
+        if (result.canceled) return;
+        setSelectedImages(result.assets.map(a => a.uri));
+    }
+
+    async function getLocationForBundle() {
+        
     }
 
     useEffect(() => {
         console.log('imageLocations: ', imageLocations);
     }, [imageLocations]);
+
+    useEffect(() => {
+        if (!selectedImages) return;
+        addImageAlbum('My images', selectedImages);
+    }, [selectedImages]);
 
     return (
         <>
@@ -83,14 +86,14 @@ const MapJournal = () => {
             />
             <ActionSheet
                 acceptedPanPositions={acceptablePanPositions}
-                sheetPosition={sheetPosition}
-                setSheetPosition={setSheetPosition}
             >
                 <View style={styles.buttonContainer}>
                     <GenericButton label="+" onPressAsync={getImages}/>
                     <GenericButton label="." onPressAsync={handleMoveMapToUserClick}/>
                 </View>
-                <View style={styles.bottomSheet} />
+                <View style={styles.bottomSheet}>
+                    <Gallery imageAlbums={imageAlbums} />
+                </View>
             </ActionSheet>
         </>
     );

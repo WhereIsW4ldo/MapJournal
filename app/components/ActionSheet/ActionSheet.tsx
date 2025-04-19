@@ -6,8 +6,6 @@ import {GetClosestPanPosition} from "@/app/components/ActionSheet/ActionSheetSer
 type Props = {
     children: string | ReactElement | ReactElement[],
     acceptedPanPositions?: number[],
-    sheetPosition: number,
-    setSheetPosition: (position: number) => void,
 };
 
 const ActionSheet = (
