@@ -17,6 +17,7 @@ const MapJournal = () => {
     
     const [selectedImages, setSelectedImages] = useState<string[]>();
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
+    const [sheetPosition, setSheetPosition] = useState(0);
 
     const mapRef = useRef<MapView>(null);
 
@@ -82,6 +83,8 @@ const MapJournal = () => {
             />
             <ActionSheet
                 acceptedPanPositions={acceptablePanPositions}
+                sheetPosition={sheetPosition}
+                setSheetPosition={setSheetPosition}
             >
                 <View style={styles.buttonContainer}>
                     <GenericButton label="+" onPressAsync={getImages}/>

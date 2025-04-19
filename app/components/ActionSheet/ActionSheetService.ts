@@ -11,7 +11,7 @@ export function GetClosestPanPosition(
     const minDifference = Math.min(...difference);
     const smallestDifference = difference.indexOf(minDifference);
     
-    console.log(`action sheet let go at ${currentPosition}, putting to ${acceptablePositions[smallestDifference]}`);
+    // console.log(`action sheet let go at ${currentPosition}, putting to ${acceptablePositions[smallestDifference]}`);
     
     return acceptablePositions[smallestDifference];
 }

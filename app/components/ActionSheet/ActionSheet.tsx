@@ -1,21 +1,34 @@
 import styles from "@/app/components/ActionSheet/ActionSheet.styles";
 import {Animated, PanResponder, View} from "react-native";
-import {ReactElement, useEffect, useRef, useState} from "react";
+import {ReactElement, useEffect, useMemo, useRef, useState} from "react";
 import {GetClosestPanPosition} from "@/app/components/ActionSheet/ActionSheetService";
 
 type Props = {
     children: string | ReactElement | ReactElement[],
     acceptedPanPositions?: number[],
+    sheetPosition: number,
+    setSheetPosition: (position: number) => void,
 };
 
-const ActionSheet = ({children, acceptedPanPositions}: Props) => {
-    const [pan, setPan] = useState(new Animated.ValueXY());
+const ActionSheet = (
+    {
+        children,
+        acceptedPanPositions
+    }: Props) => {
+    const pan = useRef(new Animated.ValueXY()).current;
 
     const panResponder = useRef(
         PanResponder.create({
             onMoveShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponderCapture: () => false,
+            onMoveShouldSetPanResponderCapture: () => true,
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderStart: (e) => {
+                // console.log('startStart', pan);
+                pan.extractOffset();
+                // console.log('startEnd', pan);
+            },
             onPanResponderMove: (evt, gestureState) => {
+                // console.log('moveStart', pan);
                 return Animated.event(
                     [
                         null,
@@ -25,7 +38,7 @@ const ActionSheet = ({children, acceptedPanPositions}: Props) => {
                 )(evt, gestureState);
             },
             onPanResponderRelease: () => {
-                console.log('release', pan);
+                // console.log('releaseStart', pan);
                 pan.flattenOffset();
                 const y = GetClosestPanPosition(parseInt(JSON.stringify(pan.y)), acceptedPanPositions);
                 Animated.spring(pan, {
@@ -35,12 +48,9 @@ const ActionSheet = ({children, acceptedPanPositions}: Props) => {
                     },
                     useNativeDriver: false,
                 }).start();
+                // console.log('releaseEnd', pan);
             }
         })).current;
-
-    useEffect(() => {
-        console.log('panY: ', pan.y);
-    }, [pan.y]);
 
     return (
         <View style={styles.container}>
