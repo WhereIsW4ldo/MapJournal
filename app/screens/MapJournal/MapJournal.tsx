@@ -1,16 +1,20 @@
 import Map from "@/app/components/Map/Map";
-import GenericButton from "@/app/components/Buttons/GenericButton";
-import {View, Image} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
-import styles from "./MapJournal.styles";
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
 import MapView, {LatLng} from "react-native-maps";
 import {addImageLocation} from "@/app/stores/imageLocationStore";
 import {useAppDispatch, useAppSelector} from "@/app/hooks/hooks";
+import ActionSheet from "@/app/components/ActionSheet/ActionSheet";
+import {useWindowDimensions, View} from "react-native";
+import styles from "@/app/components/ActionSheet/ActionSheet.styles";
+import GenericButton from "@/app/components/Buttons/GenericButton";
 
 const MapJournal = () => {
+    const { height } = useWindowDimensions();
+    const acceptablePanPositions = [0, -(height * 0.5), -(height * 0.95)];
+    
     const [selectedImages, setSelectedImages] = useState<string[]>();
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
 
@@ -76,14 +80,15 @@ const MapJournal = () => {
                 location={location?.coords}
                 ref={mapRef}
             />
-            <View
-                style={styles.container}
+            <ActionSheet
+                acceptedPanPositions={acceptablePanPositions}
             >
                 <View style={styles.buttonContainer}>
                     <GenericButton label="+" onPressAsync={getImages}/>
                     <GenericButton label="." onPressAsync={handleMoveMapToUserClick}/>
                 </View>
-            </View>
+                <View style={styles.bottomSheet} />
+            </ActionSheet>
         </>
     );
 }
