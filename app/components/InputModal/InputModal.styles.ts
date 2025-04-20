@@ -24,14 +24,6 @@ export const styles = StyleSheet.create({
         marginBottom: 15,
         fontWeight: 'bold'
     },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 15,
-        borderRadius: 5,
-        width: '100%'
-    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -51,5 +43,12 @@ export const styles = StyleSheet.create({
     contentContainer: {
         maxHeight: MODAL_MAX_HEIGHT - 120, // Account for title, input, and button space
         overflow: 'scroll'
+    },
+    cancelButton: {
+        backgroundColor: 'gray',
+        padding: 10,
+        borderRadius: 5,
+        minWidth: 80,
+        alignItems: 'center',
     }
 }); 

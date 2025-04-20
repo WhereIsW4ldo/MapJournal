@@ -16,7 +16,7 @@ const Album = ({title, images, id, onRemove}: Props) => {
                     <Text>
                         {title}
                     </Text>
-                )}  
+                )}
                 {onRemove && id && (
                     <Pressable onPress={() => onRemove(id)}>
                         <Text style={styles.removeButton}>Remove</Text>

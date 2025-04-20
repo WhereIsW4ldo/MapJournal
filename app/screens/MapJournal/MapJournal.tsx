@@ -6,7 +6,7 @@ import useUserLocation from "@/app/hooks/useUserLocation";
 import MapView, {LatLng} from "react-native-maps";
 import {useAppDispatch, useAppSelector} from "@/app/hooks/hooks";
 import ActionSheet from "@/app/components/ActionSheet/ActionSheet";
-import {useWindowDimensions, View} from "react-native";
+import {TextInput, useWindowDimensions, View} from "react-native";
 import styles from "@/app/components/ActionSheet/ActionSheet.styles";
 import GenericButton from "@/app/components/Buttons/GenericButton";
 import Gallery from "@/app/components/Gallery/Gallery";
@@ -22,6 +22,7 @@ const MapJournal = () => {
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [input, setInput] = useState<string>('');
 
     const mapRef = useRef<MapView>(null);
 
@@ -85,6 +86,13 @@ const MapJournal = () => {
         setModalVisible(false);
 
         setSelectedImages([]);
+        setInput('');
+    }
+
+    function cancelAddImageAlbum() {
+        setModalVisible(false);
+        setSelectedImages([]);
+        setInput('');
     }
 
     return (
@@ -96,8 +104,15 @@ const MapJournal = () => {
             <InputModal
                 visible={modalVisible}
                 title='Enter album title'
-                onSubmit={handleAddImageAlbum}
+                onSubmit={() => handleAddImageAlbum(input)}
+                onCancel={cancelAddImageAlbum}
             >
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setInput}
+                    value={input}
+                    placeholder="Enter text here..."
+                />
                 <Album images={selectedImages}/>
             </InputModal>
             <ActionSheet
