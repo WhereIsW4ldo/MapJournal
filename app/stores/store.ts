@@ -1,9 +1,11 @@
 import { configureStore} from "@reduxjs/toolkit";
 import imageLocationReducer from "./imageLocationStore";
+import albumLocationReducer from "./albumLocationStore";
 
 const store = configureStore({
     reducer: {
-        imageLocation: imageLocationReducer
+        imageLocation: imageLocationReducer,
+        albumLocation: albumLocationReducer
     }
 });
 

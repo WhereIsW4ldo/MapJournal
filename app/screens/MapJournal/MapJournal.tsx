@@ -3,27 +3,36 @@ import * as ImagePicker from 'expo-image-picker';
 
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
-import MapView from "react-native-maps";
+import MapView, {LatLng} from "react-native-maps";
 import {useAppDispatch, useAppSelector} from "@/app/hooks/hooks";
 import ActionSheet from "@/app/components/ActionSheet/ActionSheet";
 import {useWindowDimensions, View} from "react-native";
 import styles from "@/app/components/ActionSheet/ActionSheet.styles";
 import GenericButton from "@/app/components/Buttons/GenericButton";
-import Gallery, {Section} from "@/app/components/Gallery/Gallery";
+import Gallery from "@/app/components/Gallery/Gallery";
+import {addAlbumLocation} from "@/app/stores/albumLocationStore";
+import {uuid} from "expo-modules-core";
+import InputModal from "@/app/components/InputModal/InputModal";
+import Album from "@/app/components/Album/Album";
 
 const MapJournal = () => {
     const {height} = useWindowDimensions();
     const acceptablePanPositions = [0, -(height * 0.5), -(height * 0.95)];
 
-    const [selectedImages, setSelectedImages] = useState<string[]>();
-    const [imageAlbums, setImageAlbums] = useState<Section[]>([]);
+    const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const mapRef = useRef<MapView>(null);
 
     const {location, errorMsg} = useUserLocation();
     const dispatch = useAppDispatch();
     const imageLocations = useAppSelector(state => state.imageLocation);
+    const albumLocations = useAppSelector(state => state.albumLocation);
+
+    useEffect(() => {
+        console.log('albumLocations: ', albumLocations);
+    }, [albumLocations]);
 
     function moveMapToUser(latitude: number, longitude: number) {
         if (!mapRef.current) return;
@@ -42,7 +51,12 @@ const MapJournal = () => {
     }
     
     function addImageAlbum(title: string, images: string[]) {
-        setImageAlbums(imageAlbums => [...imageAlbums, {title, data: images}]);
+        dispatch(addAlbumLocation({
+            id: uuid.v4(),
+            creationDate: (new Date()).toDateString(),
+            title: title,
+            images: images,
+        }));
     }
 
     useEffect(() => {
@@ -59,24 +73,19 @@ const MapJournal = () => {
             aspect: [4, 3],
             exif: true
         });
-        console.log(result);
         
         if (result.canceled) return;
+
         setSelectedImages(result.assets.map(a => a.uri));
+        setModalVisible(true);
     }
 
-    async function getLocationForBundle() {
-        
+    function handleAddImageAlbum(input: string) {
+        addImageAlbum(input, selectedImages);
+        setModalVisible(false);
+
+        setSelectedImages([]);
     }
-
-    useEffect(() => {
-        console.log('imageLocations: ', imageLocations);
-    }, [imageLocations]);
-
-    useEffect(() => {
-        if (!selectedImages) return;
-        addImageAlbum('My images', selectedImages);
-    }, [selectedImages]);
 
     return (
         <>
@@ -84,6 +93,13 @@ const MapJournal = () => {
                 location={location?.coords}
                 ref={mapRef}
             />
+            <InputModal
+                visible={modalVisible}
+                title='Enter album title'
+                onSubmit={handleAddImageAlbum}
+            >
+                <Album images={selectedImages}/>
+            </InputModal>
             <ActionSheet
                 acceptedPanPositions={acceptablePanPositions}
             >
@@ -92,7 +108,7 @@ const MapJournal = () => {
                     <GenericButton label="." onPressAsync={handleMoveMapToUserClick}/>
                 </View>
                 <View style={styles.bottomSheet}>
-                    <Gallery imageAlbums={imageAlbums} />
+                    <Gallery />
                 </View>
             </ActionSheet>
         </>

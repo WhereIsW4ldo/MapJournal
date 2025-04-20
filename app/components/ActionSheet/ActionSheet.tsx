@@ -19,14 +19,11 @@ const ActionSheet = (
         PanResponder.create({
             onMoveShouldSetPanResponder: () => true,
             onMoveShouldSetPanResponderCapture: () => true,
-            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponder: () => false,
             onPanResponderStart: (e) => {
-                // console.log('startStart', pan);
                 pan.extractOffset();
-                // console.log('startEnd', pan);
             },
             onPanResponderMove: (evt, gestureState) => {
-                // console.log('moveStart', pan);
                 return Animated.event(
                     [
                         null,
@@ -36,7 +33,6 @@ const ActionSheet = (
                 )(evt, gestureState);
             },
             onPanResponderRelease: () => {
-                // console.log('releaseStart', pan);
                 pan.flattenOffset();
                 const y = GetClosestPanPosition(parseInt(JSON.stringify(pan.y)), acceptedPanPositions);
                 Animated.spring(pan, {
@@ -46,7 +42,6 @@ const ActionSheet = (
                     },
                     useNativeDriver: false,
                 }).start();
-                // console.log('releaseEnd', pan);
             }
         })).current;
 
