@@ -32,6 +32,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: '100%'
     },
+    map: {
+        flex: 1,
+        height: 400,
+        width: '100%',
+        borderRadius: 10,
+    }
 });
 
 export default styles;
