@@ -1,50 +1,93 @@
-# Welcome to your Expo app 👋
+# MapJournal
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+MapJournal is a mobile application that allows users to create photo albums with location data. Users can select images from their gallery, add them to albums, and place these albums on a map with custom coordinates.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📍 Interactive map interface
+- 📸 Image selection from gallery
+- 🗺️ Album creation with location data
+- 📱 Responsive design
+- 💾 Persistent storage using Redux
+- 🎨 Modern UI with smooth animations
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+- Node.js (v14 or higher)
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for iOS development) or Android Studio (for Android development)
 
-   ```bash
-    npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone https://github.com/yourusername/MapJournal.git
+cd MapJournal
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
 
-## Learn more
+3. Start the development server:
+```bash
+npm start
+# or
+yarn start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Given that the Google Maps API needs an API key, you need to copy the [`.example.env`](.example.env) file, and change the api key to the one you got from [Google Maps Guidelines](https://developers.google.com/maps/documentation/javascript/get-api-key)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+5. Run on your preferred platform:
+- Press `i` for iOS simulator
+- Press `a` for Android emulator
+- Scan the QR code with Expo Go app on your physical device
 
-## Join the community
+## Project Structure
 
-Join our community of developers creating universal apps.
+```
+app/
+├── components/         # Reusable UI components
+├── hooks/             # Custom React hooks
+├── screens/           # Main application screens
+├── stores/            # Redux store configuration
+├── constants/         # Application constants
+└── _layout.tsx        # Root layout configuration
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Dependencies
+
+- expo
+- react-native
+- react-native-maps
+- @reduxjs/toolkit
+- redux-persist
+- @react-native-async-storage/async-storage
+- expo-image-picker
+- expo-location
+
+## State Management
+
+The application uses Redux with Redux Toolkit for state management. The store is configured with persistence using `redux-persist` and `@react-native-async-storage/async-storage`.
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Expo team for the amazing development platform
+- React Native community for the great ecosystem
+- All contributors who have helped improve this project
