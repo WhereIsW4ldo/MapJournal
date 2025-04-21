@@ -50,14 +50,6 @@ const AlbumCreationModals = ({
                     value={title}
                     placeholder="Enter title here..."
                 />
-                <Album images={selectedImages}/>
-            </InputModal>
-            <InputModal
-                visible={addAlbumState === 2}
-                title='Enter album description'
-                onSubmit={() => setAddAlbumState(3)}
-                onCancel={endAddImageAlbum}
-            >
                 <TextInput
                     style={styles.input}
                     onChangeText={setDescription}
@@ -69,7 +61,7 @@ const AlbumCreationModals = ({
                 <Album images={selectedImages}/>
             </InputModal>
             <InputModal
-                visible={addAlbumState === 3}
+                visible={addAlbumState === 2}
                 title='Choose coordinates for album'
                 onSubmit={() => handleAddImageAlbum(title, description, selectedImages, region)}
                 onCancel={endAddImageAlbum}
