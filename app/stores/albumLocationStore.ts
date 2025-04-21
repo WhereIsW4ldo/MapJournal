@@ -7,7 +7,7 @@ export type AlbumLocation = {
     title: string;
     images: string[];
     description?: string;
-    coordinates?: LatLng;
+    coordinates: LatLng;
 }
 
 const initialState: AlbumLocation[] = [];

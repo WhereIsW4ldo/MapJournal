@@ -15,6 +15,7 @@ import {addAlbumLocation} from "@/app/stores/albumLocationStore";
 import {uuid} from "expo-modules-core";
 import {initialRegion} from "@/app/constants/initialRegion";
 import AlbumCreationModals from "@/app/components/AlbumCreationModals/AlbumCreationModals";
+import AlbumPin from "../components/AlbumPin/AlbumPin";
 
 
 const height = Dimensions.get('window').height;
@@ -30,9 +31,8 @@ const MapJournal = () => {
 
     const mapRef = useRef<MapView>(null);
 
-    const {location, errorMsg} = useUserLocation();
+    const {location} = useUserLocation();
     const dispatch = useAppDispatch();
-    const imageLocations = useAppSelector(state => state.imageLocation);
     const albumLocations = useAppSelector(state => state.albumLocation);
 
     const router = useRouter();
@@ -119,7 +119,19 @@ const MapJournal = () => {
                 ref={mapRef}
             >
                 {location &&
-                    <Marker coordinate={{latitude: location.coords.latitude, longitude: location.coords.longitude}}/>}
+                    <Marker
+                        tracksViewChanges={false}
+                        tracksInfoWindowChanges={false} 
+                        coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }} 
+                    />}
+                {albumLocations && 
+                    albumLocations.map(album => (
+                        <AlbumPin
+                            key={album.id}
+                            coordinates={album.coordinates}
+                            firstImage={album.images[0]}
+                        />
+                    ))}
             </Map>
             <AlbumCreationModals
                 addAlbumState={addAlbumState}
