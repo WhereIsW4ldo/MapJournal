@@ -5,6 +5,7 @@ import ActionSheet from "../components/ActionSheet/ActionSheet";
 import { acceptablePanPositions } from "./MapJournal";
 import Album from "../components/Album/Album";
 import { useLocalSearchParams } from "expo-router";
+import { styles } from "./AlbumDetails.styles";
 
 const AlbumDetails = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,14 +21,12 @@ const AlbumDetails = () => {
 
     return (
         <>
-            <View style={{ flex: 1 }}>
-                <Text>{album.title}</Text>
-                <Text>{album.description}</Text>
+            <View style={styles.container}>
+                <Text style={styles.title}>{album.title}</Text>
+                <Text style={styles.description}>{album.description}</Text>
                 {album.coordinates && (
                     <MapView
-                        style={{
-                            flex: 3,
-                        }}
+                        style={styles.map}
                         region={{
                             latitude: album.coordinates?.latitude,
                             longitude: album.coordinates?.longitude,
@@ -47,7 +46,7 @@ const AlbumDetails = () => {
             <ActionSheet
                 acceptedPanPositions={acceptablePanPositions}
             >
-                <View style={{ flex: 1 }}>
+                <View style={styles.albumContainer}>
                     <Album images={album.images}/>
                 </View>
             </ActionSheet>

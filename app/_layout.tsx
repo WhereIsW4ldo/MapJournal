@@ -6,18 +6,14 @@ import store from "./stores/store";
 export default function RootLayout() {
     return (
         <Provider store={store}>
-            <Stack>
+            <Stack screenOptions={{
+                headerShown: false,
+            }}>
                 <Stack.Screen
                     name="MapJournal"
-                    options={{
-                        headerShown: false,
-                    }}
                 />
                 <Stack.Screen
                     name="AlbumDetails"
-                    options={{
-                        headerShown: false,
-                    }}
                 />
             </Stack>
             <StatusBar style="inverted" />

@@ -4,23 +4,19 @@ import {forwardRef, useState} from "react";
 import initialMapRegion from "@/app/components/Map/InitialMapRegion";
 
 type Props = {
-    location?: LatLng;
+    children?: React.ReactNode;
 }
 
-const Map = forwardRef<MapView, Props>(({location}: Props, ref) => {
-    const [region, setRegion] = useState<Region>(initialMapRegion);
-    
+const Map = forwardRef<MapView, Props>(({children}: Props, ref) => {
     return (
         <>
             <MapView
                 style={styles.map}
-                initialRegion={region}
-                onRegionChangeComplete={setRegion}
+                initialRegion={initialMapRegion()}
                 provider={PROVIDER_GOOGLE}
                 ref={ref}
             >
-                {location &&
-                    <Marker coordinate={{latitude: location.latitude, longitude: location.longitude}}/>}
+                {children}
             </MapView>
         </>
     );
