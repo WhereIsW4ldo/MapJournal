@@ -128,6 +128,7 @@ const MapJournal = () => {
                     albumLocations.map(album => (
                         <AlbumPin
                             key={album.id}
+                            id={album.id}
                             coordinates={album.coordinates}
                             firstImage={album.images[0]}
                         />

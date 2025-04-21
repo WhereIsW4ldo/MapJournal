@@ -1,17 +1,31 @@
+import { router } from "expo-router";
+import { useState } from "react";
 import { View, Image } from "react-native";
 import { LatLng, Marker } from "react-native-maps";
 
 type Props = {
     coordinates: LatLng;
     firstImage: string;
+    id: string;
 }
 
-const AlbumPin = ({ coordinates, firstImage }: Props) => {
+const AlbumPin = ({ coordinates, firstImage, id }: Props) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    const handleAlbumPress = (id: string) => {
+        console.log('id: ', id);
+        router.push({
+            pathname: "/screens/AlbumDetails",
+            params: { id }
+        });
+    }
+
     return (
         <Marker
             coordinate={coordinates}
-            tracksViewChanges={true}
+            tracksViewChanges={!imageLoaded}
             tracksInfoWindowChanges={false}
+            onPress={() => handleAlbumPress(id)}
         >
             <View style={{ 
                 width: 40, 
@@ -28,6 +42,7 @@ const AlbumPin = ({ coordinates, firstImage }: Props) => {
                         borderRadius: 19 // Slightly smaller than container to prevent cutoff
                     }}
                     resizeMode="cover"
+                    onLoadEnd={() => setImageLoaded(true)}
                 />
             </View>
         </Marker>
