@@ -1,6 +1,6 @@
 import Map from "@/app/components/Map/Map";
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
@@ -22,12 +22,7 @@ const height = Dimensions.get('window').height;
 export const acceptablePanPositions = [0, -(height * 0.5), -(height * 0.95)];
 
 const MapJournal = () => {
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
-    const [zoomedToUserLocation, setZoomedToUserLocation] = useState<boolean>(false);
-    const [addAlbumState, setAddAlbumState] = useState<number>(0);
-    const [region, setRegion] = useState<Region>(initialRegion());
 
     const mapRef = useRef<MapView>(null);
 
@@ -68,13 +63,6 @@ const MapJournal = () => {
         }));
     }
 
-    useEffect(() => {
-        if (zoomedToUserLocation || !location || !mapRef.current) return;
-
-        moveMapToUser(location.coords.latitude, location.coords.longitude);
-        setZoomedToUserLocation(true);
-    }, [location, mapRef]);
-
     async function getImages() {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
@@ -86,23 +74,10 @@ const MapJournal = () => {
         if (result.canceled) return;
 
         setSelectedImages(result.assets.map(a => a.uri));
-        setAddAlbumState(1);
     }
 
-    function handleAddImageAlbum(title: string, description: string, selectedImages: string[], region: Region) {
-        addImageAlbum(title, description, selectedImages, {
-            latitude: region.latitude,
-            longitude: region.longitude,
-        });
-
-        endAddImageAlbum();
-    }
-
-    function endAddImageAlbum() {
-        setSelectedImages([]);
-            setTitle('');
-            setDescription('');
-        setAddAlbumState(0);
+    function handleAddImageAlbum(title: string, description: string, selectedImages: string[], coordinates: LatLng) {
+        addImageAlbum(title, description, selectedImages, coordinates);
     }
 
     const handleAlbumPress = (id: string) => {
@@ -135,16 +110,7 @@ const MapJournal = () => {
                     ))}
             </Map>
             <AlbumCreationModals
-                addAlbumState={addAlbumState}
-                title={title}
-                description={description}
                 selectedImages={selectedImages}
-                region={region}
-                setTitle={setTitle}
-                setDescription={setDescription}
-                setRegion={setRegion}
-                setAddAlbumState={setAddAlbumState}
-                endAddImageAlbum={endAddImageAlbum}
                 handleAddImageAlbum={handleAddImageAlbum}
             />
             <ActionSheet

@@ -13,6 +13,13 @@ const Map = forwardRef<MapView, Props>(({children}: Props, ref) => {
             <MapView
                 style={styles.map}
                 initialRegion={initialMapRegion()}
+                showsMyLocationButton={false}
+                showsPointsOfInterest={false}
+                showsCompass={false}
+                showsScale={false}
+                showsIndoorLevelPicker={false}
+                loadingEnabled={true}
+                moveOnMarkerPress={false}
                 provider={PROVIDER_GOOGLE}
                 ref={ref}
             >

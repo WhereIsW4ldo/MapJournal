@@ -10,8 +10,6 @@ type Props = {
 }
 
 const AlbumPin = ({ coordinates, firstImage, id }: Props) => {
-    const [imageLoaded, setImageLoaded] = useState(false);
-
     const handleAlbumPress = (id: string) => {
         console.log('id: ', id);
         router.push({
@@ -23,7 +21,7 @@ const AlbumPin = ({ coordinates, firstImage, id }: Props) => {
     return (
         <Marker
             coordinate={coordinates}
-            tracksViewChanges={!imageLoaded}
+            tracksViewChanges={true}
             tracksInfoWindowChanges={false}
             onPress={() => handleAlbumPress(id)}
         >
@@ -42,7 +40,6 @@ const AlbumPin = ({ coordinates, firstImage, id }: Props) => {
                         borderRadius: 19 // Slightly smaller than container to prevent cutoff
                     }}
                     resizeMode="cover"
-                    onLoadEnd={() => setImageLoaded(true)}
                 />
             </View>
         </Marker>

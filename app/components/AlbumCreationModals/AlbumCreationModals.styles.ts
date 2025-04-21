@@ -24,5 +24,9 @@ export const styles = StyleSheet.create({
         height: 400,
         width: '100%',
         borderRadius: 10,
+    },  
+    errorMessage: {
+        color: 'red',
+        marginBottom: 10,
     },
 }); 
