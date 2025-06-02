@@ -1,6 +1,6 @@
 import Map from "@/app/components/Map/Map";
 import * as ImagePicker from 'expo-image-picker';
-import { router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 import React, {useEffect, useRef, useState} from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
@@ -13,7 +13,6 @@ import GenericButton from "@/app/components/Buttons/GenericButton";
 import Gallery from "@/app/components/Gallery/Gallery";
 import {addAlbumLocation} from "@/app/stores/albumLocationStore";
 import {uuid} from "expo-modules-core";
-import {initialRegion} from "@/app/constants/initialRegion";
 import AlbumCreationModals from "@/app/components/AlbumCreationModals/AlbumCreationModals";
 import AlbumPin from "../components/AlbumPin/AlbumPin";
 
@@ -31,10 +30,6 @@ const MapJournal = () => {
     const albumLocations = useAppSelector(state => state.albumLocation);
 
     const router = useRouter();
-
-    useEffect(() => {
-        console.log('albumLocations: ', albumLocations);
-    }, [albumLocations]);
 
     function moveMapToUser(latitude: number, longitude: number) {
         if (!mapRef.current) return;

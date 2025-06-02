@@ -19,17 +19,8 @@ const AlbumCreationModals = ({
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [coordinates, setCoordinates] = useState<LatLng>();
-
     const [addAlbumState, setAddAlbumState] = useState(0);
-
     const [errorMessage, setErrorMessage] = useState<string>();
-
-    useEffect(() => {
-        if (selectedImages.length === 0)
-            setAddAlbumState(0);
-        else
-            setAddAlbumState(1);
-    }, [selectedImages]);
 
     const clearState = () => {
         setTitle('');
@@ -50,6 +41,13 @@ const AlbumCreationModals = ({
     const handleCancel = () => {
         clearState();
     }
+
+    useEffect(() => {
+        if (selectedImages.length === 0)
+            setAddAlbumState(0);
+        else
+            setAddAlbumState(1);
+    }, [selectedImages]);
 
     return (
         <>

@@ -11,7 +11,6 @@ type Props = {
 
 const AlbumPin = ({ coordinates, firstImage, id }: Props) => {
     const handleAlbumPress = (id: string) => {
-        console.log('id: ', id);
         router.push({
             pathname: "/screens/AlbumDetails",
             params: { id }
