@@ -2,11 +2,10 @@ import Map from "@/app/components/Map/Map";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useUserLocation from "@/app/hooks/useUserLocation";
 import MapView, { LatLng, Marker } from "react-native-maps";
 import { useAppDispatch, useAppSelector } from "@/app/hooks/hooks";
-import ActionSheet from "@/app/components/ActionSheet/ActionSheet";
 import { View, Dimensions } from "react-native";
 import styles from "@/app/components/ActionSheet/ActionSheet.styles";
 import GenericButton from "@/app/components/Buttons/GenericButton";
@@ -15,6 +14,7 @@ import { addAlbumLocation } from "@/app/stores/albumLocationStore";
 import { uuid } from "expo-modules-core";
 import AlbumCreationModals from "@/app/components/AlbumCreationModals/AlbumCreationModals";
 import AlbumPin from "../components/AlbumPin/AlbumPin";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
 const height = Dimensions.get("window").height;
 export const acceptablePanPositions = [0, -(height * 0.5), -(height * 0.95)];
@@ -23,12 +23,20 @@ const MapJournal = () => {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const mapRef = useRef<MapView>(null);
+  const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const { location } = useUserLocation();
   const dispatch = useAppDispatch();
   const albumLocations = useAppSelector((state) => state.albumLocation);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (actionSheetRef.current) {
+      actionSheetRef.current.show();
+    }
+
+  }, [actionSheetRef])
 
   function moveMapToUser(latitude: number, longitude: number) {
     if (!mapRef.current) return;
@@ -124,7 +132,7 @@ const MapJournal = () => {
         selectedImages={selectedImages}
         handleAddImageAlbum={handleAddImageAlbum}
       />
-      <ActionSheet acceptedPanPositions={acceptablePanPositions}>
+      <ActionSheet gestureEnabled={true} snapPoints={[20, 40, 60]} initialSnapIndex={1} ref={actionSheetRef}>
         <View style={styles.buttonContainer}>
           <GenericButton label="+" onPressAsync={getImages} />
           <GenericButton label="." onPressAsync={handleMoveMapToUserClick} />
